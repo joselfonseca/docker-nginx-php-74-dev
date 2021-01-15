@@ -16,11 +16,18 @@ RUN apt-get update \
     && mkdir /run/php
 
 RUN pecl install grpc
+RUN pecl install xdebug
 
 RUN echo "extension=grpc.so" >> /etc/php/7.4/cli/conf.d/20-grpc.ini
 RUN echo "extension=grpc.so" >> /etc/php/7.4/fpm/conf.d/20-grpc.ini
+RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini
+RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini
+RUN echo "xdebug.remote_enable=on" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 
 RUN sh nodesource_setup.sh
 
