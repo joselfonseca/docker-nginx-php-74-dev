@@ -6,20 +6,24 @@ RUN apt-get clean && apt-get -y update && apt-get install -y locales && locale-g
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US.UTF-8' LC_ALL='en_US.UTF-8'
 
 RUN apt-get update \
-    && DEBIAN_FRONTEND="noninteractive" apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 libxrender1 libxext6 mysql-client libssh2-1-dev autoconf libz-dev\
+    && DEBIAN_FRONTEND="noninteractive" apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
+    libxrender1 libxext6 mysql-client libssh2-1-dev autoconf libz-dev libpcre3-dev \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update \
     && apt-get install -y php7.4-fpm php7.4-cli php7.4-gd php7.4-mysql php7.4-intl php7.4-pgsql \
-       php7.4-imap php-memcached php7.4-mbstring php7.4-xml php7.4-curl \
+       php7.4-imap php-memcached php7.4-mbstring php7.4-xml php7.4-curl php7.4-soap php7.4-oauth \
        php7.4-sqlite3 php7.4-zip php7.4-pdo-dblib php7.4-bcmath php7.4-ssh2 php7.4-dev php7.4-redis php-pear \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && mkdir /run/php
 
 RUN pecl install grpc
 RUN pecl install xdebug
+RUN pecl install oauth
 
 RUN echo "extension=grpc.so" >> /etc/php/7.4/cli/conf.d/20-grpc.ini
 RUN echo "extension=grpc.so" >> /etc/php/7.4/fpm/conf.d/20-grpc.ini
+RUN echo "extension=oauth.so" > /etc/php/7.4/cli/conf.d/oauth.ini
+RUN echo "extension=oauth.so" > /etc/php/7.4/fpm/conf.d/oauth.ini
 RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini
 RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini
 RUN echo "xdebug.remote_enable=on" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini \
