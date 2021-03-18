@@ -22,8 +22,8 @@ RUN pecl install oauth
 
 RUN echo "extension=grpc.so" >> /etc/php/7.4/cli/conf.d/20-grpc.ini
 RUN echo "extension=grpc.so" >> /etc/php/7.4/fpm/conf.d/20-grpc.ini
-RUN echo "extension=oauth.so" > /etc/php/7.4/cli/conf.d/oauth.ini
-RUN echo "extension=oauth.so" > /etc/php/7.4/fpm/conf.d/oauth.ini
+#RUN echo "extension=oauth.so" > /etc/php/7.4/cli/conf.d/oauth.ini
+#RUN echo "extension=oauth.so" > /etc/php/7.4/fpm/conf.d/oauth.ini
 RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini
 RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini
 RUN echo "xdebug.remote_enable=on" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini \
