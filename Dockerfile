@@ -1,7 +1,5 @@
 FROM ubuntu:20.04
 
-MAINTAINER Jose Fonseca <jose@ditecnologia.com>
-
 RUN apt-get clean && apt-get -y update && apt-get install -y locales && locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US.UTF-8' LC_ALL='en_US.UTF-8'
 
@@ -15,18 +13,6 @@ RUN apt-get update \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && mkdir /run/php
 
-RUN pecl install grpc
-RUN pecl install xdebug
-
-RUN echo "extension=grpc.so" >> /etc/php/7.4/cli/conf.d/20-grpc.ini
-RUN echo "extension=grpc.so" >> /etc/php/7.4/fpm/conf.d/20-grpc.ini
-RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini
-RUN echo "zend_extension=xdebug.so" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini
-RUN echo "xdebug.remote_enable=on" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /etc/php/7.4/cli/conf.d/21-xdebug.ini \
-    && echo "xdebug.remote_enable=on" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /etc/php/7.4/fpm/conf.d/21-xdebug.ini
-
 RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 
 RUN sh nodesource_setup.sh
@@ -36,6 +22,8 @@ RUN apt-get install -y nodejs build-essential
 RUN curl -fsSL https://get.docker.com -o get-docker.sh
 
 RUN sh get-docker.sh
+
+RUN update-ca-certificates
 
 RUN apt-get remove -y --purge software-properties-common \
 	&& apt-get -y autoremove \
